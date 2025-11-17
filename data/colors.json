@@ -1,0 +1,23 @@
+[
+  {
+    "id": "white",
+    "name": "Белый",
+    "hexCode": "#ffffff",
+    "price": 0,
+    "isPremium": false
+  },
+  {
+    "id": "metallic-red",
+    "name": "Металлик красный",
+    "hexCode": "#cc0000", 
+    "price": 25000,
+    "isPremium": true
+  },
+  {
+    "id": "black",
+    "name": "Черный",
+    "hexCode": "#000000",
+    "price": 0,
+    "isPremium": false
+  }
+]
