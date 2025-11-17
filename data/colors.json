@@ -7,17 +7,38 @@
     "isPremium": false
   },
   {
-    "id": "metallic-red",
-    "name": "Металлик красный",
-    "hexCode": "#cc0000", 
-    "price": 25000,
-    "isPremium": true
-  },
-  {
     "id": "black",
     "name": "Черный",
     "hexCode": "#000000",
     "price": 0,
     "isPremium": false
+  },
+  {
+    "id": "silver",
+    "name": "Серебристый",
+    "hexCode": "#c0c0c0",
+    "price": 0,
+    "isPremium": false
+  },
+  {
+    "id": "blue",
+    "name": "Синий",
+    "hexCode": "#0000ff",
+    "price": 15000,
+    "isPremium": true
+  },
+  {
+    "id": "red",
+    "name": "Красный",
+    "hexCode": "#ff0000",
+    "price": 20000,
+    "isPremium": true
+  },
+  {
+    "id": "green",
+    "name": "Зеленый",
+    "hexCode": "#008000",
+    "price": 25000,
+    "isPremium": true
   }
 ]
