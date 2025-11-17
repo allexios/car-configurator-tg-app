@@ -145,20 +145,22 @@
         async function loadAllData() {
             try {
                 // Вариант 1: Загрузка из API
+                /*
                 const [brands, colors, options] = await Promise.all([
                     fetch(`${API_BASE_URL}/brands`).then(r => r.json()),
                     fetch(`${API_BASE_URL}/colors`).then(r => r.json()),
                     fetch(`${API_BASE_URL}/options`).then(r => r.json())
                 ]);
+                */
 
                 // Вариант 2: Загрузка из JSON файлов на GitHub
-                /*
+                
                 const [brands, colors, options] = await Promise.all([
                     fetch(`${API_BASE_URL}/brands.json`).then(r => r.json()),
                     fetch(`${API_BASE_URL}/colors.json`).then(r => r.json()),
                     fetch(`${API_BASE_URL}/options.json`).then(r => r.json())
                 ]);
-                */
+                
 
                 brandsData = brands;
                 colorsData = colors;
@@ -178,10 +180,10 @@
 
             try {
                 // Вариант 1: Загрузка из API
-                const models = await fetch(`${API_BASE_URL}/brands/${brandId}/models`).then(r => r.json());
+                // const models = await fetch(`${API_BASE_URL}/brands/${brandId}/models`).then(r => r.json());
                 
                 // Вариант 2: Загрузка из JSON файла
-                // const models = await fetch(`${API_BASE_URL}/models-${brandId}.json`).then(r => r.json());
+                const models = await fetch(`${API_BASE_URL}/models-${brandId}.json`).then(r => r.json());
                 
                 modelsData[brandId] = models;
                 return models;
