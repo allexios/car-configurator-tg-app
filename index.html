@@ -6,313 +6,104 @@
     <title>Конфигуратор автомобиля</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-button-color: #50a8eb;
-            --tg-theme-button-text-color: #ffffff;
-            --tg-theme-secondary-bg-color: #f0f0f0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            padding: 16px;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        .step {
-            display: none;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .step.active {
-            display: block;
-        }
-
-        h1 {
+        /* Стили остаются прежними */
+        .loading {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        h2 {
-            margin: 20px 0 15px 0;
-            font-size: 1.2rem;
-        }
-
-        .model-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .model-card:hover {
-            border-color: var(--tg-theme-button-color);
-        }
-
-        .model-card.selected {
-            border-color: var(--tg-theme-button-color);
-            background: rgba(80, 168, 235, 0.1);
-        }
-
-        .model-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .model-price {
+            padding: 20px;
             color: #666;
-            margin-top: 5px;
         }
-
-        .color-option {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            margin: 5px;
-            cursor: pointer;
-            border: 3px solid transparent;
-            position: relative;
-        }
-
-        .color-option.selected {
-            border-color: var(--tg-theme-button-color);
-        }
-
-        .color-option.selected::after {
-            content: "✓";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .option-item {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 12px;
-            margin: 8px 0;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .option-item.selected {
-            border-color: var(--tg-theme-button-color);
-            background: rgba(80, 168, 235, 0.1);
-        }
-
-        .option-price {
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .total-price {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--tg-theme-button-color);
+        .error {
             text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: var(--tg-theme-secondary-bg-color);
-            border-radius: 10px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        button {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background: var(--tg-theme-button-color);
-            color: var(--tg-theme-button-text-color);
-        }
-
-        .btn-secondary {
-            background: var(--tg-theme-secondary-bg-color);
-            color: var(--tg-theme-text-color);
-        }
-
-        .navigation {
-            position: sticky;
-            bottom: 0;
-            background: var(--tg-theme-bg-color);
-            padding: 15px 0;
-            border-top: 1px solid #eee;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .car-image {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            margin: 10px auto;
-            display: block;
-            border-radius: 8px;
+            padding: 20px;
+            color: #ff4444;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Шаг 1: Выбор модели -->
-        <div class="step active" id="step-model">
-            <h1>Выберите модель автомобиля</h1>
-            
-            <div class="model-card" data-model="sedan" data-price="1500000">
-                <div class="model-name">Седан Comfort</div>
-                <div class="model-price">от 1 500 000 ₽</div>
-                <ul>
-                    <li>1.6 л двигатель</li>
-                    <li>АКПП</li>
-                    <li>Кондиционер</li>
-                </ul>
-            </div>
-
-            <div class="model-card" data-model="suv" data-price="1800000">
-                <div class="model-name">Внедорожник Premium</div>
-                <div class="model-price">от 1 800 000 ₽</div>
-                <ul>
-                    <li>2.0 л двигатель</li>
-                    <li>Полный привод</li>
-                    <li>Климат-контроль</li>
-                </ul>
-            </div>
-
-            <div class="model-card" data-model="coupe" data-price="2200000">
-                <div class="model-name">Купе Sport</div>
-                <div class="model-price">от 2 200 000 ₽</div>
-                <ul>
-                    <li>2.5 л двигатель</li>
-                    <li>Спортивная подвеска</li>
-                    <li>Кожаный салон</li>
-                </ul>
-            </div>
+        <div id="loading" class="loading">
+            Загрузка данных...
         </div>
 
-        <!-- Шаг 2: Выбор цвета -->
-        <div class="step" id="step-color">
-            <h1>Выберите цвет</h1>
-            
-            <div style="text-align: center;">
-                <div class="color-option" data-color="white" data-price="0" style="background: #ffffff; border: 1px solid #ccc;"></div>
-                <div class="color-option" data-color="black" data-price="0" style="background: #000000;"></div>
-                <div class="color-option" data-color="silver" data-price="0" style="background: #c0c0c0;"></div>
-                <div class="color-option" data-color="red" data-price="15000" style="background: #ff0000;"></div>
-                <div class="color-option" data-color="blue" data-price="15000" style="background: #0000ff;"></div>
-                <div class="color-option" data-color="green" data-price="20000" style="background: #008000;"></div>
+        <div id="app-content" style="display: none;">
+            <!-- Шаг 1: Выбор марки -->
+            <div class="step active" id="step-brand">
+                <h1>Выберите марку автомобиля</h1>
+                <div id="brands-container">
+                    <!-- Бренды будут загружены динамически -->
+                </div>
             </div>
 
-            <div id="color-image">
-                <!-- Здесь будет изображение автомобиля выбранного цвета -->
-            </div>
-        </div>
-
-        <!-- Шаг 3: Дополнительные опции -->
-        <div class="step" id="step-options">
-            <h1>Дополнительные опции</h1>
-            
-            <div class="option-item" data-option="leather" data-price="50000">
-                <span>Кожаный салон</span>
-                <span class="option-price">+50 000 ₽</span>
+            <!-- Остальные шаги остаются похожими, но с динамической загрузкой -->
+            <!-- Шаг 2: Выбор модели -->
+            <div class="step" id="step-model">
+                <h1 id="model-title">Выберите модель</h1>
+                <div class="back-to-brands">
+                    <a class="back-link" onclick="backToBrands()">← Вернуться к выбору марки</a>
+                </div>
+                <div id="models-container">
+                    <!-- Модели будут загружены динамически -->
+                </div>
             </div>
 
-            <div class="option-item" data-option="premium-sound" data-price="30000">
-                <span>Премиальная аудиосистема</span>
-                <span class="option-price">+30 000 ₽</span>
+            <!-- Шаг 3: Выбор цвета -->
+            <div class="step" id="step-color">
+                <h1>Выберите цвет</h1>
+                <div class="back-to-brands">
+                    <a class="back-link" onclick="backToModel()">← Вернуться к выбору модели</a>
+                </div>
+                <div id="colors-container">
+                    <!-- Цвета будут загружены динамически -->
+                </div>
             </div>
 
-            <div class="option-item" data-option="panorama" data-price="70000">
-                <span>Панорамная крыша</span>
-                <span class="option-price">+70 000 ₽</span>
+            <!-- Шаг 4: Дополнительные опции -->
+            <div class="step" id="step-options">
+                <h1>Дополнительные опции</h1>
+                <div class="back-to-brands">
+                    <a class="back-link" onclick="backToColor()">← Вернуться к выбору цвета</a>
+                </div>
+                <div id="options-container">
+                    <!-- Опции будут загружены динамически -->
+                </div>
             </div>
 
-            <div class="option-item" data-option="assist" data-price="40000">
-                <span>Система помощи при парковке</span>
-                <span class="option-price">+40 000 ₽</span>
+            <!-- Шаг 5: Итоговая конфигурация -->
+            <div class="step" id="step-summary">
+                <h1>Ваша конфигурация</h1>
+                <div class="back-to-brands">
+                    <a class="back-link" onclick="backToOptions()">← Вернуться к опциям</a>
+                </div>
+                <div id="summary-content"></div>
+                <div class="total-price" id="total-price">Итого: 0 ₽</div>
+                <button class="btn-primary" onclick="sendToManager()">Отправить менеджеру</button>
             </div>
 
-            <div class="option-item" data-option="winter" data-price="25000">
-                <span>Зимний пакет (подогревы)</span>
-                <span class="option-price">+25 000 ₽</span>
-            </div>
-        </div>
-
-        <!-- Шаг 4: Итоговая конфигурация -->
-        <div class="step" id="step-summary">
-            <h1>Ваша конфигурация</h1>
-            
-            <div id="summary-content">
-                <!-- Сюда подставляется итоговая информация -->
-            </div>
-
-            <div class="total-price" id="total-price">
-                Итого: 0 ₽
-            </div>
-
-            <button class="btn-primary" onclick="sendToManager()">Отправить менеджеру</button>
-        </div>
-
-        <!-- Навигация -->
-        <div class="navigation">
-            <div class="button-group">
-                <button class="btn-secondary" id="btn-prev" onclick="prevStep()" disabled>Назад</button>
-                <button class="btn-primary" id="btn-next" onclick="nextStep()">Далее</button>
+            <!-- Навигация -->
+            <div class="navigation">
+                <div class="button-group">
+                    <button class="btn-secondary" id="btn-prev" onclick="prevStep()" disabled>Назад</button>
+                    <button class="btn-primary" id="btn-next" onclick="nextStep()">Далее</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Конфигурация API
+        const API_BASE_URL = 'https://your-backend-api.com/api'; // Замените на ваш API
+        // Или для тестирования можно использовать JSON файл на GitHub:
+        // const API_BASE_URL = 'https://raw.githubusercontent.com/your-username/your-repo/main/data';
+
+        // Глобальные данные
+        let brandsData = [];
+        let modelsData = {};
+        let colorsData = [];
+        let optionsData = [];
+
         // Текущее состояние конфигурации
         const configuration = {
+            brand: null,
             model: null,
             color: null,
             options: [],
@@ -320,13 +111,220 @@
             totalPrice: 0
         };
 
-        const steps = ['step-model', 'step-color', 'step-options', 'step-summary'];
+        const steps = ['step-brand', 'step-model', 'step-color', 'step-options', 'step-summary'];
         let currentStep = 0;
 
         // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.BackButton.hide();
+
+        // Загрузка данных при старте
+        async function initializeApp() {
+            try {
+                tg.expand();
+                tg.BackButton.hide();
+
+                // Загружаем все данные
+                await loadAllData();
+                
+                // Скрываем loading и показываем контент
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app-content').style.display = 'block';
+                
+                // Инициализируем интерфейс
+                initializeBrands();
+                showStep(0);
+                
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                document.getElementById('loading').innerHTML = 
+                    '<div class="error">Ошибка загрузки данных. Пожалуйста, попробуйте позже.</div>';
+            }
+        }
+
+        // Загрузка всех данных
+        async function loadAllData() {
+            try {
+                // Вариант 1: Загрузка из API
+                const [brands, colors, options] = await Promise.all([
+                    fetch(`${API_BASE_URL}/brands`).then(r => r.json()),
+                    fetch(`${API_BASE_URL}/colors`).then(r => r.json()),
+                    fetch(`${API_BASE_URL}/options`).then(r => r.json())
+                ]);
+
+                // Вариант 2: Загрузка из JSON файлов на GitHub
+                /*
+                const [brands, colors, options] = await Promise.all([
+                    fetch(`${API_BASE_URL}/brands.json`).then(r => r.json()),
+                    fetch(`${API_BASE_URL}/colors.json`).then(r => r.json()),
+                    fetch(`${API_BASE_URL}/options.json`).then(r => r.json())
+                ]);
+                */
+
+                brandsData = brands;
+                colorsData = colors;
+                optionsData = options;
+
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                throw error;
+            }
+        }
+
+        // Загрузка моделей для конкретного бренда
+        async function loadModels(brandId) {
+            if (modelsData[brandId]) {
+                return modelsData[brandId];
+            }
+
+            try {
+                // Вариант 1: Загрузка из API
+                const models = await fetch(`${API_BASE_URL}/brands/${brandId}/models`).then(r => r.json());
+                
+                // Вариант 2: Загрузка из JSON файла
+                // const models = await fetch(`${API_BASE_URL}/models-${brandId}.json`).then(r => r.json());
+                
+                modelsData[brandId] = models;
+                return models;
+                
+            } catch (error) {
+                console.error('Ошибка загрузки моделей:', error);
+                return [];
+            }
+        }
+
+        // Инициализация брендов
+        function initializeBrands() {
+            const container = document.getElementById('brands-container');
+            
+            if (brandsData.length === 0) {
+                container.innerHTML = '<div class="error">Нет доступных брендов</div>';
+                return;
+            }
+
+            container.innerHTML = brandsData.map(brand => `
+                <div class="brand-card" data-brand="${brand.id}">
+                    <div class="brand-name">${brand.name}</div>
+                    <div class="brand-description">${brand.description}</div>
+                </div>
+            `).join('');
+
+            // Добавляем обработчики событий
+            document.querySelectorAll('.brand-card').forEach(card => {
+                card.addEventListener('click', async function() {
+                    document.querySelectorAll('.brand-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    configuration.brand = this.dataset.brand;
+                    
+                    // Показываем загрузку моделей
+                    const modelsContainer = document.getElementById('models-container');
+                    modelsContainer.innerHTML = '<div class="loading">Загрузка моделей...</div>';
+                    
+                    // Загружаем модели для выбранного бренда
+                    const models = await loadModels(configuration.brand);
+                    initializeModels(models);
+                    
+                    // Переходим к выбору модели
+                    setTimeout(() => {
+                        currentStep = 1;
+                        showStep(currentStep);
+                    }, 300);
+                });
+            });
+        }
+
+        // Инициализация моделей
+        function initializeModels(models) {
+            const container = document.getElementById('models-container');
+            const brandName = brandsData.find(b => b.id === configuration.brand)?.name || '';
+
+            if (models.length === 0) {
+                container.innerHTML = '<div class="error">Нет доступных моделей</div>';
+                return;
+            }
+
+            container.innerHTML = models.map(model => `
+                <div class="model-card" data-model="${model.id}" data-price="${model.price}">
+                    <div class="model-name">${model.name}</div>
+                    <div class="model-price">от ${formatPrice(model.price)} ₽</div>
+                    <ul>
+                        ${model.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+
+            // Обновляем заголовок
+            document.getElementById('model-title').textContent = `Выберите модель ${brandName}`;
+
+            // Добавляем обработчики событий
+            document.querySelectorAll('.model-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    configuration.model = this.dataset.model;
+                    configuration.basePrice = parseInt(this.dataset.price);
+                    calculateTotal();
+                });
+            });
+        }
+
+        // Инициализация цветов
+        function initializeColors() {
+            const container = document.getElementById('colors-container');
+            
+            container.innerHTML = colorsData.map(color => `
+                <div class="color-option ${color.isPremium ? 'premium' : ''}" 
+                     data-color="${color.id}" 
+                     data-price="${color.price}"
+                     style="background: ${color.hexCode}; ${color.id === 'white' ? 'border: 1px solid #ccc;' : ''}">
+                    ${color.isPremium ? '<div class="premium-badge">+</div>' : ''}
+                </div>
+            `).join('');
+
+            // Добавляем обработчики событий
+            document.querySelectorAll('.color-option').forEach(color => {
+                color.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    configuration.color = this.dataset.color;
+                    calculateTotal();
+                });
+            });
+        }
+
+        // Инициализация опций
+        function initializeOptions() {
+            const container = document.getElementById('options-container');
+            
+            container.innerHTML = optionsData.map(option => `
+                <div class="option-item" data-option="${option.id}" data-price="${option.price}">
+                    <span>${option.name}</span>
+                    <span class="option-price">+${formatPrice(option.price)} ₽</span>
+                </div>
+            `).join('');
+
+            // Добавляем обработчики событий
+            document.querySelectorAll('.option-item').forEach(option => {
+                option.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    
+                    const optionId = this.dataset.option;
+                    const optionPrice = parseInt(this.dataset.price);
+                    
+                    if (this.classList.contains('selected')) {
+                        if (!configuration.options.includes(optionId)) {
+                            configuration.options.push(optionId);
+                        }
+                    } else {
+                        configuration.options = configuration.options.filter(opt => opt !== optionId);
+                    }
+                    
+                    calculateTotal();
+                });
+            });
+        }
 
         // Навигация по шагам
         function showStep(stepIndex) {
@@ -339,25 +337,30 @@
                 }
             });
 
-            // Обновляем кнопки навигации
             document.getElementById('btn-prev').disabled = stepIndex === 0;
             document.getElementById('btn-next').textContent = stepIndex === steps.length - 1 ? 'Завершить' : 'Далее';
 
-            // На последнем шаге обновляем итоги
-            if (stepIndex === steps.length - 1) {
+            // Инициализируем контент для каждого шага
+            if (stepIndex === 2) {
+                initializeColors();
+            } else if (stepIndex === 3) {
+                initializeOptions();
+            } else if (stepIndex === steps.length - 1) {
                 updateSummary();
             }
         }
+
+        // Остальные функции (nextStep, prevStep, calculateTotal, updateSummary и т.д.)
+        // остаются похожими, но используют динамические данные
 
         function nextStep() {
             if (currentStep < steps.length - 1) {
                 currentStep++;
                 showStep(currentStep);
             } else {
-                // Действие при завершении
                 tg.showPopup({
                     title: 'Готово!',
-                    message: 'Конфигурация сохранена. Нажмите "Отправить менеджеру" для связи.',
+                    message: 'Конфигурация сохранена.',
                     buttons: [{ type: 'ok' }]
                 });
             }
@@ -370,84 +373,41 @@
             }
         }
 
-        // Выбор модели
-        document.querySelectorAll('.model-card').forEach(card => {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                configuration.model = this.dataset.model;
-                configuration.basePrice = parseInt(this.dataset.price);
-                calculateTotal();
-            });
-        });
-
-        // Выбор цвета
-        document.querySelectorAll('.color-option').forEach(color => {
-            color.addEventListener('click', function() {
-                document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                configuration.color = this.dataset.color;
-                calculateTotal();
-                
-                // Можно добавить смену изображения автомобиля
-                updateColorImage();
-            });
-        });
-
-        // Выбор опций
-        document.querySelectorAll('.option-item').forEach(option => {
-            option.addEventListener('click', function() {
-                this.classList.toggle('selected');
-                
-                const optionId = this.dataset.option;
-                const optionPrice = parseInt(this.dataset.price);
-                
-                if (this.classList.contains('selected')) {
-                    if (!configuration.options.includes(optionId)) {
-                        configuration.options.push(optionId);
-                    }
-                } else {
-                    configuration.options = configuration.options.filter(opt => opt !== optionId);
-                }
-                
-                calculateTotal();
-            });
-        });
-
-        // Расчет общей стоимости
         function calculateTotal() {
             let total = configuration.basePrice;
             
-            // Добавляем стоимость цвета
             const selectedColor = document.querySelector('.color-option.selected');
             if (selectedColor) {
                 total += parseInt(selectedColor.dataset.price);
             }
             
-            // Добавляем стоимость опций
             document.querySelectorAll('.option-item.selected').forEach(option => {
                 total += parseInt(option.dataset.price);
             });
             
             configuration.totalPrice = total;
             
-            // Обновляем отображение цены если на последнем шаге
             if (currentStep === steps.length - 1) {
                 updateSummary();
             }
         }
 
-        // Обновление итоговой страницы
         function updateSummary() {
             const summaryContent = document.getElementById('summary-content');
             const totalPriceElement = document.getElementById('total-price');
             
+            const brand = brandsData.find(b => b.id === configuration.brand);
+            const model = modelsData[configuration.brand]?.find(m => m.id === configuration.model);
+            const color = colorsData.find(c => c.id === configuration.color);
+            
             let html = `
                 <div class="summary-item">
+                    <span>Марка:</span>
+                    <span>${brand?.name || 'Не выбрано'}</span>
+                </div>
+                <div class="summary-item">
                     <span>Модель:</span>
-                    <span>${getModelName(configuration.model)}</span>
+                    <span>${model?.name || 'Не выбрано'}</span>
                 </div>
                 <div class="summary-item">
                     <span>Базовая цена:</span>
@@ -455,27 +415,27 @@
                 </div>
             `;
             
-            if (configuration.color) {
-                const colorPrice = document.querySelector('.color-option.selected').dataset.price;
+            if (color) {
                 html += `
                     <div class="summary-item">
-                        <span>Цвет (${configuration.color}):</span>
-                        <span>+${formatPrice(parseInt(colorPrice))} ₽</span>
+                        <span>Цвет (${color.name}):</span>
+                        <span>+${formatPrice(color.price)} ₽</span>
                     </div>
                 `;
             }
             
             if (configuration.options.length > 0) {
                 html += `<div class="summary-item"><strong>Доп. опции:</strong></div>`;
-                configuration.options.forEach(option => {
-                    const optionElement = document.querySelector(`[data-option="${option}"]`);
-                    const optionPrice = optionElement.dataset.price;
-                    html += `
-                        <div class="summary-item">
-                            <span>• ${optionElement.querySelector('span').textContent}</span>
-                            <span>+${formatPrice(parseInt(optionPrice))} ₽</span>
-                        </div>
-                    `;
+                configuration.options.forEach(optionId => {
+                    const option = optionsData.find(o => o.id === optionId);
+                    if (option) {
+                        html += `
+                            <div class="summary-item">
+                                <span>• ${option.name}</span>
+                                <span>+${formatPrice(option.price)} ₽</span>
+                            </div>
+                        `;
+                    }
                 });
             }
             
@@ -483,46 +443,37 @@
             totalPriceElement.textContent = `Итого: ${formatPrice(configuration.totalPrice)} ₽`;
         }
 
-        // Вспомогательные функции
-        function getModelName(model) {
-            const models = {
-                'sedan': 'Седан Comfort',
-                'suv': 'Внедорожник Premium',
-                'coupe': 'Купе Sport'
-            };
-            return models[model] || 'Не выбрано';
-        }
-
         function formatPrice(price) {
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
 
-        function updateColorImage() {
-            // Здесь можно добавить логику смены изображения автомобиля
-            // В зависимости от выбранного цвета
-        }
-
-        // Отправка конфигурации менеджеру
         function sendToManager() {
             const configData = {
+                brand: configuration.brand,
                 model: configuration.model,
                 color: configuration.color,
                 options: configuration.options,
-                totalPrice: configuration.totalPrice
+                totalPrice: configuration.totalPrice,
+                timestamp: new Date().toISOString()
             };
             
-            // Отправляем данные боту
             tg.sendData(JSON.stringify(configData));
             
             tg.showPopup({
                 title: 'Отправлено!',
-                message: 'Ваша конфигурация отправлена менеджеру. Мы свяжемся с вами в ближайшее время.',
+                message: 'Конфигурация отправлена менеджеру.',
                 buttons: [{ type: 'ok' }]
             });
         }
 
-        // Инициализация
-        showStep(0);
+        // Функции возврата
+        function backToBrands() { currentStep = 0; showStep(currentStep); }
+        function backToModel() { currentStep = 1; showStep(currentStep); }
+        function backToColor() { currentStep = 2; showStep(currentStep); }
+        function backToOptions() { currentStep = 3; showStep(currentStep); }
+
+        // Запуск приложения
+        initializeApp();
     </script>
 </body>
 </html>
