@@ -1,0 +1,27 @@
+[
+  {
+    "id": "premium-sound",
+    "name": "Премиальная аудиосистема",
+    "price": 50000
+  },
+  {
+    "id": "autopilot", 
+    "name": "Расширенный автопилот",
+    "price": 150000
+  },
+  {
+    "id": "premium-interior",
+    "name": "Премиальная отделка салона",
+    "price": 100000
+  },
+  {
+    "id": "fast-charge",
+    "name": "Система быстрой зарядки",
+    "price": 75000
+  },
+  {
+    "id": "winter-package",
+    "name": "Зимний пакет",
+    "price": 60000
+  }
+]
