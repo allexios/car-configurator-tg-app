@@ -3,15 +3,18 @@
     "id": "zeekr",
     "name": "Zeekr",
     "description": "Премиальные электромобили от Geely"
+    "image": "brands/zeekr.jpg"
   },
   {
     "id": "lixiang", 
     "name": "LiXiang",
     "description": "Комфортные гибридные SUV"
+    "image": "brands/lixiang.jpg"
   },
   {
     "id": "xiaomi",
     "name": "Xiaomi",
     "description": "Инновационные технологии и дизайн"
+    "image": "brands/xiaomi.jpg"
   }
 ]
