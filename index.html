@@ -6,7 +6,6 @@
     <title>Конфигуратор автомобиля</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Стили остаются прежними из вашего файла */
         :root {
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
@@ -52,11 +51,13 @@
         .brand-card {
             border: 2px solid #e0e0e0;
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             margin: 10px 0;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .brand-card:hover {
@@ -69,10 +70,33 @@
             background: rgba(80, 168, 235, 0.1);
         }
 
+        .image-placeholder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .brand-image {
+            width: 80px;
+            height: 60px;
+            font-size: 0.8rem;
+            padding: 5px;
+        }
+
+        .brand-info {
+            flex: 1;
+        }
+
         .brand-name {
             font-weight: bold;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
         }
 
         .brand-description {
@@ -98,40 +122,82 @@
             background: rgba(80, 168, 235, 0.1);
         }
 
+        .model-image {
+            width: 100%;
+            height: 150px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
         .model-name {
             font-weight: bold;
             font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
         .model-price {
             color: #666;
-            margin-top: 5px;
+            margin-bottom: 8px;
         }
 
         .color-option {
-            display: inline-block;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            margin: 8px;
+            cursor: pointer;
+        }
+
+        .color-swatch {
             width: 60px;
             height: 60px;
             border-radius: 8px;
-            margin: 5px;
-            cursor: pointer;
             border: 3px solid transparent;
-            position: relative;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
-        .color-option.selected {
+        .color-option.selected .color-swatch {
             border-color: var(--tg-theme-button-color);
+            transform: scale(1.1);
         }
 
-        .color-option.selected::after {
-            content: "✓";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .color-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .color-price {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .car-preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .car-image {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto;
         }
 
         .option-item {
@@ -141,8 +207,13 @@
             margin: 8px 0;
             cursor: pointer;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            border-color: var(--tg-theme-button-color);
         }
 
         .option-item.selected {
@@ -150,9 +221,41 @@
             background: rgba(80, 168, 235, 0.1);
         }
 
+        .option-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .option-description {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
         .option-price {
             color: #28a745;
             font-weight: bold;
+            font-size: 1rem;
         }
 
         .summary-item {
@@ -245,6 +348,28 @@
         .back-link:hover {
             text-decoration: underline;
         }
+
+        .colors-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .preview-container {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .preview-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--tg-theme-text-color);
+        }
     </style>
 </head>
 <body>
@@ -275,18 +400,29 @@
 
             <!-- Шаг 3: Выбор цвета -->
             <div class="step" id="step-color">
-                <h1>Выберите цвет</h1>
+                <h1 id="color-title">Выберите цвет</h1>
                 <div class="back-to-brands">
                     <a class="back-link" onclick="backToModel()">← Вернуться к выбору модели</a>
                 </div>
-                <div id="colors-container">
+                
+                <!-- Превью автомобиля -->
+                <div class="preview-container">
+                    <div class="preview-title" id="color-preview-title">Предпросмотр</div>
+                    <div class="car-preview">
+                        <div id="color-preview-image" class="car-image">
+                            Автомобиль
+                        </div>
+                    </div>
+                </div>
+
+                <div id="colors-container" class="colors-grid">
                     <!-- Цвета будут загружены динамически -->
                 </div>
             </div>
 
             <!-- Шаг 4: Дополнительные опции -->
             <div class="step" id="step-options">
-                <h1>Дополнительные опции</h1>
+                <h1 id="options-title">Дополнительные опции</h1>
                 <div class="back-to-brands">
                     <a class="back-link" onclick="backToColor()">← Вернуться к выбору цвета</a>
                 </div>
@@ -301,6 +437,17 @@
                 <div class="back-to-brands">
                     <a class="back-link" onclick="backToOptions()">← Вернуться к опциям</a>
                 </div>
+                
+                <!-- Превью финальной конфигурации -->
+                <div class="preview-container">
+                    <div class="preview-title">Ваш автомобиль</div>
+                    <div class="car-preview">
+                        <div id="final-preview-image" class="car-image">
+                            Ваш выбор
+                        </div>
+                    </div>
+                </div>
+
                 <div id="summary-content"></div>
                 <div class="total-price" id="total-price">Итого: 0 ₽</div>
                 <button class="btn-primary" onclick="sendToManager()">Отправить менеджеру</button>
@@ -323,8 +470,8 @@
         // Глобальные данные
         let brandsData = [];
         let modelsData = {};
-        let colorsData = [];
-        let optionsData = [];
+        let colorsData = {};
+        let optionsData = {};
 
         // Текущее состояние конфигурации
         const configuration = {
@@ -378,16 +525,6 @@
                 if (!brandsResponse.ok) throw new Error(`HTTP error! status: ${brandsResponse.status}`);
                 brandsData = await brandsResponse.json();
 
-                console.log('Загрузка colors...');
-                const colorsResponse = await fetch(`${API_BASE_URL}/colors.json`);
-                if (!colorsResponse.ok) throw new Error(`HTTP error! status: ${colorsResponse.status}`);
-                colorsData = await colorsResponse.json();
-
-                console.log('Загрузка options...');
-                const optionsResponse = await fetch(`${API_BASE_URL}/options.json`);
-                if (!optionsResponse.ok) throw new Error(`HTTP error! status: ${optionsResponse.status}`);
-                optionsData = await optionsResponse.json();
-
                 console.log('Все основные данные загружены');
 
             } catch (error) {
@@ -418,6 +555,60 @@
             }
         }
 
+        // Загрузка цветов для конкретного бренда
+        async function loadColors(brandId) {
+            if (colorsData[brandId]) {
+                return colorsData[brandId];
+            }
+
+            try {
+                console.log(`Загрузка цветов для бренда: ${brandId}`);
+                const response = await fetch(`${API_BASE_URL}/colors-${brandId}.json`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const colors = await response.json();
+                colorsData[brandId] = colors;
+                console.log(`Цвета для ${brandId} загружены:`, colors);
+                return colors;
+                
+            } catch (error) {
+                console.error('Ошибка загрузки цветов:', error);
+                return [];
+            }
+        }
+
+        // Загрузка опций для конкретного бренда/модели
+        async function loadOptions(brandId, modelId = null) {
+            const key = modelId ? `${brandId}-${modelId}` : brandId;
+            
+            if (optionsData[key]) {
+                return optionsData[key];
+            }
+
+            try {
+                console.log(`Загрузка опций для: ${key}`);
+                const filename = modelId ? `options-${brandId}-${modelId}.json` : `options-${brandId}.json`;
+                const response = await fetch(`${API_BASE_URL}/${filename}`);
+                
+                if (!response.ok) {
+                    // Если опций для конкретной модели нет, пробуем загрузить общие для бренда
+                    if (modelId) {
+                        return await loadOptions(brandId);
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const options = await response.json();
+                optionsData[key] = options;
+                console.log(`Опции для ${key} загружены:`, options);
+                return options;
+                
+            } catch (error) {
+                console.error('Ошибка загрузки опций:', error);
+                return [];
+            }
+        }
+
         // Инициализация брендов
         function initializeBrands() {
             const container = document.getElementById('brands-container');
@@ -429,8 +620,13 @@
 
             container.innerHTML = brandsData.map(brand => `
                 <div class="brand-card" data-brand="${brand.id}">
-                    <div class="brand-name">${brand.name}</div>
-                    <div class="brand-description">${brand.description}</div>
+                    <div class="image-placeholder brand-image">
+                        ${brand.name}
+                    </div>
+                    <div class="brand-info">
+                        <div class="brand-name">${brand.name}</div>
+                        <div class="brand-description">${brand.description}</div>
+                    </div>
                 </div>
             `).join('');
 
@@ -471,6 +667,9 @@
 
             container.innerHTML = models.map(model => `
                 <div class="model-card" data-model="${model.id}" data-price="${model.price}">
+                    <div class="image-placeholder model-image">
+                        ${model.name}
+                    </div>
                     <div class="model-name">${model.name}</div>
                     <div class="model-price">от ${formatPrice(model.price)} ₽</div>
                     <ul>
@@ -484,71 +683,124 @@
 
             // Добавляем обработчики событий
             document.querySelectorAll('.model-card').forEach(card => {
-                card.addEventListener('click', function() {
+                card.addEventListener('click', async function() {
                     document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
                     this.classList.add('selected');
                     
                     configuration.model = this.dataset.model;
                     configuration.basePrice = parseInt(this.dataset.price);
+                    
+                    // Сбрасываем предыдущие выборы
+                    configuration.color = null;
+                    configuration.options = [];
+                    
                     calculateTotal();
                 });
             });
         }
 
         // Инициализация цветов
-        function initializeColors() {
+        async function initializeColors() {
             const container = document.getElementById('colors-container');
+            const brandName = brandsData.find(b => b.id === configuration.brand)?.name || '';
+            const modelName = modelsData[configuration.brand]?.find(m => m.id === configuration.model)?.name || '';
             
-            container.innerHTML = colorsData.map(color => `
+            // Показываем загрузку
+            container.innerHTML = '<div class="loading">Загрузка цветов...</div>';
+            
+            // Загружаем цвета для выбранного бренда
+            const colors = await loadColors(configuration.brand);
+            
+            if (colors.length === 0) {
+                container.innerHTML = '<div class="error">Нет доступных цветов</div>';
+                return;
+            }
+
+            container.innerHTML = colors.map(color => `
                 <div class="color-option" 
                      data-color="${color.id}" 
                      data-price="${color.price}"
-                     style="background: ${color.hexCode}; ${color.id === 'white' ? 'border: 1px solid #ccc;' : ''}">
+                     onclick="selectColor('${color.id}')">
+                    <div class="color-swatch" style="background: ${color.hexCode}">
+                        ${color.price > 0 ? '+' : ''}
+                    </div>
+                    <div class="color-name">${color.name}</div>
+                    <div class="color-price">${color.price > 0 ? '+' + formatPrice(color.price) + ' ₽' : 'включен'}</div>
                 </div>
             `).join('');
 
-            // Добавляем обработчики событий
-            document.querySelectorAll('.color-option').forEach(color => {
-                color.addEventListener('click', function() {
-                    document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
-                    this.classList.add('selected');
-                    
-                    configuration.color = this.dataset.color;
-                    calculateTotal();
-                });
-            });
+            // Обновляем заголовок
+            document.getElementById('color-title').textContent = `Выберите цвет для ${brandName} ${modelName}`;
+            document.getElementById('color-preview-title').textContent = `Превью ${brandName} ${modelName}`;
+
+            // Устанавливаем первый цвет по умолчанию
+            if (colors.length > 0) {
+                selectColor(colors[0].id);
+            }
+        }
+
+        // Выбор цвета
+        function selectColor(colorId) {
+            document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
+            const selectedColor = document.querySelector(`[data-color="${colorId}"]`);
+            if (selectedColor) {
+                selectedColor.classList.add('selected');
+            }
+            
+            configuration.color = colorId;
+            calculateTotal();
         }
 
         // Инициализация опций
-        function initializeOptions() {
+        async function initializeOptions() {
             const container = document.getElementById('options-container');
+            const brandName = brandsData.find(b => b.id === configuration.brand)?.name || '';
+            const modelName = modelsData[configuration.brand]?.find(m => m.id === configuration.model)?.name || '';
             
-            container.innerHTML = optionsData.map(option => `
-                <div class="option-item" data-option="${option.id}" data-price="${option.price}">
-                    <span>${option.name}</span>
-                    <span class="option-price">+${formatPrice(option.price)} ₽</span>
+            // Показываем загрузку
+            container.innerHTML = '<div class="loading">Загрузка опций...</div>';
+            
+            // Загружаем опции для выбранной модели (или общие для бренда)
+            const options = await loadOptions(configuration.brand, configuration.model);
+            
+            if (options.length === 0) {
+                container.innerHTML = '<div class="error">Нет доступных опций</div>';
+                return;
+            }
+
+            container.innerHTML = options.map(option => `
+                <div class="option-item" data-option="${option.id}" data-price="${option.price}" onclick="toggleOption(this)">
+                    <div class="image-placeholder option-image">
+                        ${option.name.split(' ').map(word => word[0]).join('').toUpperCase()}
+                    </div>
+                    <div class="option-content">
+                        <div class="option-name">${option.name}</div>
+                        ${option.description ? `<div class="option-description">${option.description}</div>` : ''}
+                    </div>
+                    <div class="option-price">+${formatPrice(option.price)} ₽</div>
                 </div>
             `).join('');
 
-            // Добавляем обработчики событий
-            document.querySelectorAll('.option-item').forEach(option => {
-                option.addEventListener('click', function() {
-                    this.classList.toggle('selected');
-                    
-                    const optionId = this.dataset.option;
-                    const optionPrice = parseInt(this.dataset.price);
-                    
-                    if (this.classList.contains('selected')) {
-                        if (!configuration.options.includes(optionId)) {
-                            configuration.options.push(optionId);
-                        }
-                    } else {
-                        configuration.options = configuration.options.filter(opt => opt !== optionId);
-                    }
-                    
-                    calculateTotal();
-                });
-            });
+            // Обновляем заголовок
+            document.getElementById('options-title').textContent = `Дополнительные опции для ${brandName} ${modelName}`;
+        }
+
+        // Переключение опции
+        function toggleOption(element) {
+            element.classList.toggle('selected');
+            
+            const optionId = element.dataset.option;
+            const optionPrice = parseInt(element.dataset.price);
+            
+            if (element.classList.contains('selected')) {
+                if (!configuration.options.includes(optionId)) {
+                    configuration.options.push(optionId);
+                }
+            } else {
+                configuration.options = configuration.options.filter(opt => opt !== optionId);
+            }
+            
+            calculateTotal();
         }
 
         // Навигация по шагам
@@ -572,6 +824,18 @@
                 initializeOptions();
             } else if (stepIndex === steps.length - 1) {
                 updateSummary();
+                updateFinalPreview();
+            }
+        }
+
+        // Обновление финального превью
+        function updateFinalPreview() {
+            const finalImage = document.getElementById('final-preview-image');
+            const brand = brandsData.find(b => b.id === configuration.brand);
+            const model = modelsData[configuration.brand]?.find(m => m.id === configuration.model);
+            
+            if (brand && model) {
+                finalImage.textContent = `${brand.name} ${model.name}`;
             }
         }
 
@@ -598,11 +862,13 @@
         function calculateTotal() {
             let total = configuration.basePrice;
             
+            // Добавляем стоимость цвета
             const selectedColor = document.querySelector('.color-option.selected');
             if (selectedColor) {
                 total += parseInt(selectedColor.dataset.price);
             }
             
+            // Добавляем стоимость опций
             document.querySelectorAll('.option-item.selected').forEach(option => {
                 total += parseInt(option.dataset.price);
             });
@@ -620,7 +886,9 @@
             
             const brand = brandsData.find(b => b.id === configuration.brand);
             const model = modelsData[configuration.brand]?.find(m => m.id === configuration.model);
-            const color = colorsData.find(c => c.id === configuration.color);
+            const colors = colorsData[configuration.brand] || [];
+            const color = colors.find(c => c.id === configuration.color);
+            const options = optionsData[`${configuration.brand}-${configuration.model}`] || optionsData[configuration.brand] || [];
             
             let html = `
                 <div class="summary-item">
@@ -649,7 +917,7 @@
             if (configuration.options.length > 0) {
                 html += `<div class="summary-item"><strong>Доп. опции:</strong></div>`;
                 configuration.options.forEach(optionId => {
-                    const option = optionsData.find(o => o.id === optionId);
+                    const option = options.find(o => o.id === optionId);
                     if (option) {
                         html += `
                             <div class="summary-item">
