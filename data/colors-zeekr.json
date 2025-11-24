@@ -1,0 +1,32 @@
+[
+  {
+    "id": "white",
+    "name": "Белый",
+    "hexCode": "#ffffff",
+    "price": 0
+  },
+  {
+    "id": "black",
+    "name": "Черный",
+    "hexCode": "#000000",
+    "price": 0
+  },
+  {
+    "id": "silver",
+    "name": "Серебристый",
+    "hexCode": "#c0c0c0",
+    "price": 0
+  },
+  {
+    "id": "blue",
+    "name": "Синий",
+    "hexCode": "#0000ff",
+    "price": 15000
+  },
+  {
+    "id": "red",
+    "name": "Красный",
+    "hexCode": "#ff0000",
+    "price": 20000
+  }
+]
