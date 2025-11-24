@@ -1,0 +1,14 @@
+[
+  {
+    "id": "gaming-package",
+    "name": "Игровой пакет для SU7",
+    "price": 60000,
+    "description": "Игровая консоль и совместимость"
+  },
+  {
+    "id": "connectivity-package",
+    "name": "Пакет связи",
+    "price": 30000,
+    "description": "Улучшенная связь 5G и Wi-Fi"
+  }
+]
