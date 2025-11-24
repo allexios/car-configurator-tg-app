@@ -1043,11 +1043,11 @@
             document.getElementById('contact-modal').style.display = 'none';
         }
 
-        function submitContactForm() {
-            const name = document.getElementById('contact-name').value.trim();
-            const phone = document.getElementById('contact-phone').value.trim();
-            const email = document.getElementById('contact-email').value.trim();
-            const comment = document.getElementById('contact-comment').value.trim();
+        async function submitContactForm() {
+    const name = document.getElementById('contact-name').value.trim();
+    const phone = document.getElementById('contact-phone').value.trim();
+    const email = document.getElementById('contact-email').value.trim();
+    const comment = document.getElementById('contact-comment').value.trim();
 
             // Проверка обязательных полей
             if (!name) {
@@ -1102,28 +1102,34 @@
             message += `💎 *Итоговая стоимость:* ${formatPrice(configuration.totalPrice)} ₽\n\n`;
             message += `🕒 Время заявки: ${new Date().toLocaleString('ru-RU')}`;
 
-            // Отправляем данные
-            const configData = {
-                user: {
-                    name: name,
-                    phone: phone,
-                    email: email,
-                    comment: comment
-                },
-                configuration: {
-                    brand: configuration.brand,
-                    model: configuration.model,
-                    color: configuration.color,
-                    options: configuration.options,
-                    basePrice: configuration.basePrice,
-                    totalPrice: configuration.totalPrice
-                },
-                message: message,
-                timestamp: new Date().toISOString()
-            };
-            
-            // Отправляем данные в Telegram
-            tg.sendData(JSON.stringify(configData));
+           // Отправка на email через FormSubmit.co или аналогичный сервис
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('phone', phone);
+    formData.append('email', email);
+    formData.append('comment', comment);
+    formData.append('car_config', JSON.stringify(configuration));
+    formData.append('_subject', 'Новая заявка на автомобиль');
+
+    try {
+        await fetch('https://formsubmit.co/9299747443@mail.ru', {
+            method: 'POST',
+            body: formData
+        });
+        
+        tg.showPopup({
+            title: 'Успешно отправлено!',
+            message: 'Ваша заявка отправлена менеджеру.',
+            buttons: [{ type: 'ok' }]
+        });
+    } catch (error) {
+        tg.showPopup({
+            title: 'Ошибка',
+            message: 'Не удалось отправить заявку. Попробуйте позже.',
+            buttons: [{ type: 'ok' }]
+        });
+    }
+}
             
             closeContactModal();
             
