@@ -370,6 +370,70 @@
             margin-bottom: 10px;
             color: var(--tg-theme-text-color);
         }
+
+        /* Стили для модального окна */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background: var(--tg-theme-bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .modal p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--tg-theme-secondary-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+
+        .input-group textarea {
+            min-height: 80px;
+            resize: vertical;
+            font-family: inherit;
+        }
     </style>
 </head>
 <body>
@@ -459,6 +523,39 @@
                     <button class="btn-secondary" id="btn-prev" onclick="prevStep()" disabled>Назад</button>
                     <button class="btn-primary" id="btn-next" onclick="nextStep()">Далее</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для контактных данных -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <h2>Контактные данные</h2>
+            <p>Пожалуйста, заполните ваши контактные данные для связи</p>
+            
+            <div class="input-group">
+                <label for="contact-name">Имя:</label>
+                <input type="text" id="contact-name" placeholder="Введите ваше имя">
+            </div>
+            
+            <div class="input-group">
+                <label for="contact-phone">Телефон:</label>
+                <input type="tel" id="contact-phone" placeholder="+7 (XXX) XXX-XX-XX">
+            </div>
+            
+            <div class="input-group">
+                <label for="contact-email">Email (необязательно):</label>
+                <input type="email" id="contact-email" placeholder="email@example.com">
+            </div>
+            
+            <div class="input-group">
+                <label for="contact-comment">Комментарий (необязательно):</label>
+                <textarea id="contact-comment" placeholder="Дополнительная информация..."></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-secondary" onclick="closeContactModal()">Отмена</button>
+                <button class="btn-primary" onclick="submitContactForm()">Отправить</button>
             </div>
         </div>
     </div>
@@ -937,23 +1034,108 @@
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
 
-        function sendToManager() {
+        // Функции для работы с модальным окном контактов
+        function showContactModal() {
+            document.getElementById('contact-modal').style.display = 'flex';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contact-modal').style.display = 'none';
+        }
+
+        function submitContactForm() {
+            const name = document.getElementById('contact-name').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const comment = document.getElementById('contact-comment').value.trim();
+
+            // Проверка обязательных полей
+            if (!name) {
+                tg.showPopup({
+                    title: 'Ошибка',
+                    message: 'Пожалуйста, укажите ваше имя.',
+                    buttons: [{ type: 'ok' }]
+                });
+                return;
+            }
+
+            if (!phone) {
+                tg.showPopup({
+                    title: 'Ошибка',
+                    message: 'Пожалуйста, укажите ваш телефон.',
+                    buttons: [{ type: 'ok' }]
+                });
+                return;
+            }
+
+            // Получаем информацию о выбранной конфигурации
+            const brand = brandsData.find(b => b.id === configuration.brand);
+            const model = modelsData[configuration.brand]?.find(m => m.id === configuration.model);
+            const colors = colorsData[configuration.brand] || [];
+            const color = colors.find(c => c.id === configuration.color);
+            const options = optionsData[`${configuration.brand}-${configuration.model}`] || optionsData[configuration.brand] || [];
+            
+            const selectedOptions = options.filter(opt => configuration.options.includes(opt.id));
+            
+            // Формируем детальное сообщение
+            let message = `🚗 *Новая заявка на автомобиль*\n\n`;
+            message += `👤 *Контактные данные:*\n`;
+            message += `• Имя: ${name}\n`;
+            message += `• Телефон: ${phone}\n`;
+            message += `• Email: ${email || 'Не указан'}\n`;
+            message += `• Комментарий: ${comment || 'Не указан'}\n\n`;
+            
+            message += `🏎️ *Конфигурация автомобиля:*\n`;
+            message += `• Марка: ${brand?.name || 'Не выбрано'}\n`;
+            message += `• Модель: ${model?.name || 'Не выбрано'}\n`;
+            message += `• Цвет: ${color?.name || 'Не выбрано'}\n`;
+            message += `• Базовая цена: ${formatPrice(configuration.basePrice)} ₽\n\n`;
+            
+            if (selectedOptions.length > 0) {
+                message += `⚙️ *Дополнительные опции:*\n`;
+                selectedOptions.forEach(option => {
+                    message += `• ${option.name}: +${formatPrice(option.price)} ₽\n`;
+                });
+                message += `\n`;
+            }
+            
+            message += `💎 *Итоговая стоимость:* ${formatPrice(configuration.totalPrice)} ₽\n\n`;
+            message += `🕒 Время заявки: ${new Date().toLocaleString('ru-RU')}`;
+
+            // Отправляем данные
             const configData = {
-                brand: configuration.brand,
-                model: configuration.model,
-                color: configuration.color,
-                options: configuration.options,
-                totalPrice: configuration.totalPrice,
+                user: {
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    comment: comment
+                },
+                configuration: {
+                    brand: configuration.brand,
+                    model: configuration.model,
+                    color: configuration.color,
+                    options: configuration.options,
+                    basePrice: configuration.basePrice,
+                    totalPrice: configuration.totalPrice
+                },
+                message: message,
                 timestamp: new Date().toISOString()
             };
             
+            // Отправляем данные в Telegram
             tg.sendData(JSON.stringify(configData));
             
+            closeContactModal();
+            
             tg.showPopup({
-                title: 'Отправлено!',
-                message: 'Конфигурация отправлена менеджеру.',
+                title: 'Успешно отправлено!',
+                message: 'Ваша заявка отправлена менеджеру. Мы свяжемся с вами в ближайшее время.',
                 buttons: [{ type: 'ok' }]
             });
+        }
+
+        function sendToManager() {
+            showContactModal();
         }
 
         // Функции возврата
